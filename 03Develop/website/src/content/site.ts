@@ -11,6 +11,9 @@
 import type { ImageMetadata } from 'astro';
 import aboutPhoto from '../assets/mila-portrait.png';
 import testimonialIllustration from '../assets/testimonial-illustration.png';
+import methodTrain from '../assets/method-train.png';
+import methodFuel from '../assets/method-fuel.png';
+import methodUnderstand from '../assets/method-understand.png';
 
 export interface FaqItem {
   question: string;
@@ -102,24 +105,24 @@ export const method = {
       name: 'Train',
       summary: 'Build strength with confidence.',
       description: 'Learn to move well, progress with purpose, and feel at home in the gym.',
-      image: null as ImageMetadata | null,
-      imageAlt: '',
+      image: methodTrain as ImageMetadata | null,
+      imageAlt: 'A calm, light-filled training space with a squat rack, barbell, bench and dumbbells.',
     },
     {
       key: 'fuel',
       name: 'Fuel',
       summary: 'Structure without restriction.',
       description: 'Make nutrition simpler with flexible guidance that supports your energy and training.',
-      image: null as ImageMetadata | null,
-      imageAlt: '',
+      image: methodFuel as ImageMetadata | null,
+      imageAlt: 'A bowl of yoghurt topped with banana, berries, walnuts and dark chocolate in warm morning light.',
     },
     {
       key: 'understand',
       name: 'Understand',
       summary: 'Your body gives you information.',
       description: 'Recognise patterns in energy, recovery and wellbeing—and adapt with confidence.',
-      image: null as ImageMetadata | null,
-      imageAlt: '',
+      image: methodUnderstand as ImageMetadata | null,
+      imageAlt: 'An open notebook with a handwritten wellbeing check-in for energy, sleep, recovery, stress and mood, beside a cup of tea.',
     },
   ],
 };
