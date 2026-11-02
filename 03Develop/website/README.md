@@ -36,16 +36,29 @@ Every `TODO(Mila)` comment marks something unconfirmed. Search for it before lau
 
 Fields: name, email, broad goal, optional message, consent. No health data is collected.
 
-- **Default (no setup):** submitting opens the visitor's email app with the enquiry pre-filled,
-  addressed to the contact email. It works, but some visitors have no mail app set up.
-- **Recommended before launch:** pick a form service (e.g. Formspree, Tally, Web3Forms), sign a
-  data-processing agreement, and set `PUBLIC_FORM_ENDPOINT` in `.env` (see `.env.example`).
-  The form then sends in the background and shows a success or error message.
+The form opens in a pop-up and sends to the site's own server function, `src/pages/api/enquiry.ts`.
+That function re-checks the details, drops spam (hidden "company" field) and emails the enquiry to
+Mila through **Brevo** (EU email service). Reply-to is the visitor, so Mila can just press Reply.
+Nothing is stored or logged; the enquiry only exists in the inbox.
+
+Setup (already done in Vercel → Settings → Environments, for Production and Preview):
+
+| Variable | What it is |
+| --- | --- |
+| `BREVO_API_KEY` | Brevo API key (Secret). Replace it in Brevo → Settings → SMTP & API if it leaks. |
+| `ENQUIRY_TO_EMAIL` | Where enquiries arrive |
+| `ENQUIRY_FROM_EMAIL` | Sender address verified in Brevo |
+
+- The function region is set to Frankfurt (fra1) in Vercel → Settings → Functions.
+- Locally there is no Brevo key, so sending shows the error message. That is expected.
+- `PUBLIC_FORM_ENDPOINT` can point the form somewhere else; set it to an empty value to fall back
+  to opening a pre-filled email.
+- Privacy policy must name Vercel and Brevo as processors and state how long enquiries are kept.
 
 ## Before going live
 
 See `docs/ROADMAP.md` → "Launch checklist". In short: confirm offer/price/location, add real
-photo + logo, choose form service and host, write and legally review Impressum and
+photo + logo, write and legally review Impressum and
 Datenschutzerklärung, set `SITE_URL`.
 
 ## Structure

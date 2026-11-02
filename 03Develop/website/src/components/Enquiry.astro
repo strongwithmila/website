@@ -3,9 +3,10 @@ import Icon from './Icon.astro';
 import { enquiry, contact, instagramUrl, cta } from '../content/site';
 import { url } from '../utils/url';
 
-// If a form service endpoint is configured, the form POSTs to it.
-// Otherwise it falls back to opening a pre-filled email — still a real, working route.
-const endpoint = import.meta.env.PUBLIC_FORM_ENDPOINT ?? '';
+// The form POSTs to the site's own /api/enquiry function, which emails the enquiry to Mila.
+// PUBLIC_FORM_ENDPOINT can point it elsewhere; setting it to an empty value falls back to
+// opening a pre-filled email instead.
+const endpoint = import.meta.env.PUBLIC_FORM_ENDPOINT ?? url('/api/enquiry');
 ---
 
 <section class="section enquire" id="enquire" aria-labelledby="enquire-title">
@@ -193,6 +194,7 @@ const endpoint = import.meta.env.PUBLIC_FORM_ENDPOINT ?? '';
         goal: String(data.get('goal')),
         message: String(data.get('message') ?? '').trim(),
         consent: true,
+        company: String(data.get('company') ?? ''),
       };
 
       const endpoint = form.dataset.endpoint;
