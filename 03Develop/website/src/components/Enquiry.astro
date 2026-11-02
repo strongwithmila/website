@@ -1,6 +1,6 @@
 ---
 import Icon from './Icon.astro';
-import { enquiry, contact, instagramUrl, cta } from '../content/site';
+import { enquiry, contact, cta } from '../content/site';
 import { url } from '../utils/url';
 
 // The form POSTs to the site's own /api/enquiry function, which emails the enquiry to Mila.
@@ -16,19 +16,6 @@ const endpoint = import.meta.env.PUBLIC_FORM_ENDPOINT ?? url('/api/enquiry');
     <p class="enquire__intro">{enquiry.intro}</p>
     <a class="btn btn--primary enquire__cta" href="#enquire" data-open-enquiry>{enquiry.ctaLabel}</a>
     <p class="enquire__reassurance">{enquiry.reassurance}</p>
-
-    <ul class="enquire__links">
-      <li>
-        <a href={instagramUrl} rel="noopener" target="_blank">
-          <Icon name="instagram" size={18} />@{contact.instagramHandle}
-        </a>
-      </li>
-      <li>
-        <a href={`mailto:${contact.email}`}>
-          <Icon name="mail" size={18} />{contact.email}
-        </a>
-      </li>
-    </ul>
   </div>
 </section>
 
@@ -252,7 +239,11 @@ const endpoint = import.meta.env.PUBLIC_FORM_ENDPOINT ?? url('/api/enquiry');
 </script>
 
 <style>
-  /* Final invitation: centred, quiet, one clear button */
+  /* Final invitation on plum: the page's closing call to action, one clear cream button */
+  .enquire {
+    background: var(--plum);
+    color: var(--cream);
+  }
   .enquire__inner {
     max-width: 40rem;
     text-align: center;
@@ -263,10 +254,11 @@ const endpoint = import.meta.env.PUBLIC_FORM_ENDPOINT ?? url('/api/enquiry');
     font-weight: 500;
     letter-spacing: 0.2em;
     text-transform: uppercase;
-    color: rgb(74 51 44 / 0.78);
+    color: rgb(247 243 238 / 0.75);
   }
   .enquire h2 {
     margin: 0 0 1.5rem;
+    color: var(--cream);
     letter-spacing: -0.01em;
     text-wrap: balance;
   }
@@ -275,44 +267,26 @@ const endpoint = import.meta.env.PUBLIC_FORM_ENDPOINT ?? url('/api/enquiry');
     margin: 0 auto 2.25rem;
     font-size: 1.05rem;
     line-height: 1.75;
+    color: rgb(247 243 238 / 0.85);
   }
   .enquire__cta {
     padding: 0.95rem 2rem;
+    background: var(--cream);
+    border-color: var(--cream);
+    color: var(--plum);
+  }
+  .enquire__cta:hover {
+    background: transparent;
+    color: var(--cream);
+  }
+  .enquire__cta:focus-visible {
+    outline-color: var(--cream);
   }
   .enquire__reassurance {
     margin: 1rem 0 0;
     font-family: var(--font-serif);
     font-style: italic;
-    color: var(--plum);
-  }
-  .enquire__links {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 0.75rem 2rem;
-    margin: 2.5rem 0 0;
-    padding: 2rem 0 0;
-    list-style: none;
-    border-top: 1px solid var(--line);
-  }
-  .enquire__links a {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    min-height: 2.75rem;
-    font-size: 0.92rem;
-    color: var(--brown);
-    text-decoration: none;
-    overflow-wrap: anywhere;
-  }
-  .enquire__links a:hover {
-    color: var(--plum);
-    text-decoration: underline;
-    text-underline-offset: 0.3em;
-  }
-  .enquire__links :global(svg) {
-    flex: none;
-    color: var(--plum);
+    color: rgb(247 243 238 / 0.85);
   }
   @media (max-width: 30rem) {
     .enquire__cta {

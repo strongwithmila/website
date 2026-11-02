@@ -86,16 +86,7 @@ const segments = cycle.labels.map((label, i) => {
   /* Cream, to set it apart from the off-white method section above */
   .cycle-section {
     background: var(--cream);
-    padding-top: clamp(3.5rem, 7vw, 5.5rem);
-  }
-  /* Fine rule closing the feature before the package, which shares the cream background */
-  .cycle-section::after {
-    content: '';
-    display: block;
-    width: min(var(--max), 100%);
-    max-width: calc(100% - 2 * var(--gutter));
-    margin: clamp(3.5rem, 7vw, 5.5rem) auto 0;
-    border-top: 1px solid var(--line);
+    padding-block: clamp(3.5rem, 7vw, 5.5rem);
   }
   .cycle {
     display: grid;
