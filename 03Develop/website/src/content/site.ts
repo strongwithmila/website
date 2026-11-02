@@ -10,6 +10,7 @@
  */
 import type { ImageMetadata } from 'astro';
 import aboutPhoto from '../assets/mila-portrait.png';
+import testimonialIllustration from '../assets/testimonial-illustration.png';
 
 export interface FaqItem {
   question: string;
@@ -200,6 +201,28 @@ export const about = {
   photo: aboutPhoto as ImageMetadata | null,
   photoAlt: 'Mila sitting on a sofa at home, resting her chin on her hand and smiling.',
   credentials: [] as string[],
+};
+
+/**
+ * Testimonials: real, approved client words only. Never invent or rewrite them.
+ * Only the first one is shown for now (as a featured quote). Add up to two more later;
+ * the layout can then grow into one featured and two smaller quotes.
+ * `image` is a decorative illustration, not a likeness of the client.
+ */
+export const testimonials = {
+  eyebrow: 'Kind words',
+  heading: 'What working together can feel like',
+  items: [
+    {
+      // TODO(Mila): confirm N. has approved this lightly edited wording before launch.
+      paragraphs: [
+        'We all have struggles and doubts about food, exercise, and how to balance them with everyday life. Mila gives you the knowledge and practical tips to make that balance easier, while encouraging you to take the first steps towards change.',
+        'She’s not just a coach; she’s a friend who genuinely celebrates your happiness and progress as you learn to take better care of your body.',
+      ],
+      attribution: 'N., 41 — Berlin',
+      image: testimonialIllustration as ImageMetadata | null,
+    },
+  ],
 };
 
 export const cycle = {

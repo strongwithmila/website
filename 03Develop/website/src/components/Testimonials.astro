@@ -1,0 +1,125 @@
+---
+import { Image } from 'astro:assets';
+import { testimonials } from '../content/site';
+
+// One featured quote for now. When more approved testimonials are added to the list,
+// the rest can be shown as smaller quotes below this one.
+const [featured] = testimonials.items;
+---
+
+{featured && (
+  <section class="section kind-words" aria-labelledby="kind-words-title">
+    <div class="container kind-words__inner">
+      <header class="kind-words__head">
+        <p class="kind-words__eyebrow">{testimonials.eyebrow}</p>
+        <h2 id="kind-words-title">{testimonials.heading}</h2>
+      </header>
+
+      <figure class="quote">
+        {featured.image && (
+          <div class="quote__art">
+            <!-- Decorative illustration, not a likeness of the client -->
+            <Image src={featured.image} alt="" widths={[200, 320, 440]} sizes="(min-width: 48rem) 13rem, 9rem" />
+          </div>
+        )}
+        <div class="quote__body">
+          <blockquote>
+            {featured.paragraphs.map((p) => <p>{p}</p>)}
+          </blockquote>
+          <figcaption>{featured.attribution}</figcaption>
+        </div>
+      </figure>
+    </div>
+  </section>
+)}
+
+<style>
+  .kind-words__inner {
+    max-width: 58rem;
+  }
+  .kind-words__head {
+    margin-bottom: clamp(2rem, 5vw, 3.25rem);
+    text-align: center;
+  }
+  .kind-words__eyebrow {
+    margin: 0 0 1rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgb(58 42 36 / 0.78);
+  }
+  h2 {
+    margin: 0;
+    font-size: clamp(2rem, 1.6rem + 1.8vw, 3rem);
+    font-weight: 400;
+    line-height: 1.12;
+    color: var(--plum);
+    text-wrap: balance;
+  }
+
+  /* The quote sits in a soft card. Phones: small illustration, then the quote */
+  .quote {
+    margin: 0;
+    padding: clamp(1.75rem, 6vw, 3.5rem);
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+  }
+  .quote__art {
+    width: 9rem;
+    margin: 0 auto 1.75rem;
+  }
+  .quote__art :global(img) {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+  blockquote {
+    margin: 0;
+  }
+  blockquote p {
+    margin: 0 0 1.25rem;
+    font-family: var(--font-serif);
+    font-size: clamp(1.1rem, 1.02rem + 0.35vw, 1.3rem);
+    line-height: 1.65;
+    color: var(--brown);
+  }
+  /* The personal second paragraph, set apart in italic plum */
+  blockquote p + p {
+    margin-bottom: 0;
+    font-style: italic;
+    color: var(--plum);
+  }
+  figcaption {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    margin-top: 1.75rem;
+    font-size: 0.82rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    color: var(--burgundy);
+  }
+  figcaption::before {
+    content: '';
+    width: 2rem;
+    border-top: 1px solid currentColor;
+  }
+
+  /* Desktop: illustration on the left, quote on the right, like a magazine feature */
+  @media (min-width: 48rem) {
+    /* Illustration and quote centred as one group inside the card */
+    .quote {
+      display: grid;
+      grid-template-columns: 13rem minmax(0, 36rem);
+      justify-content: center;
+      align-items: center;
+      gap: clamp(2.5rem, 5vw, 4rem);
+    }
+    .quote__art {
+      width: 100%;
+      margin: 0;
+    }
+  }
+</style>
