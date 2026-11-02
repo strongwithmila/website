@@ -111,18 +111,18 @@ For each content brief, provide: audience insight; editorial pillar and method c
 
 ## 7. Visual design system
 
-The website design PDF supplies the clearest explicit web tokens. Use these as the **provisional website design tokens**, subject to Mila's approval and visual QA; the transcribed brand-board colors are approximations and sometimes differ.
+These are the **approved brand colours** (Mila's decision, 2 Nov 2026): brown, burgundy, navy and clay use the brand-board codes, which replace the website PDF's earlier values. Approved helper tints (near-white `#FFFDFA` cards, plum hover `#3A172D`, taupe field border `#B9A9A2`, see-through brown/cream) are listed in `03Develop/website/docs/DECISIONS.md`.
 
 | Token | Value | Use |
 | --- | --- | --- |
 | Cream | `#F7F3EE` | Primary background |
 | Off-white | `#EDE7E1` | Secondary surfaces |
 | Plum | `#4B1F3B` | Main headings, primary CTA |
-| Brown | `#3A2A24` | Body copy |
-| Navy | `#26364A` | Body-literacy accent |
+| Brown | `#4A332C` | Body copy |
+| Navy | `#2F3B4A` | Body-literacy accent |
 | Forest | `#3F5F4A` | Nutrition accent |
-| Burgundy | `#8A3F4D` | Contrast/myth-busting accent |
-| Clay | `#C47A5A` | Warm accent |
+| Burgundy | `#7A2E3A` | Contrast/myth-busting accent |
+| Clay | `#C68876` | Warm accent (decorative only, never for text) |
 
 Suggested website typography: **Playfair Display** for editorial headings, **Montserrat** for body/UI, **Allura** only for occasional decorative notes. Verify licensing, font loading, performance and accessibility; do not use a decorative font for essential information. The actual logo and original artwork take priority over a recreated approximation.
 
