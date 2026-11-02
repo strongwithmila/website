@@ -17,9 +17,12 @@ const escapeHtml = (s: string) =>
 const isEmail = (s: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s);
 
 export const POST: APIRoute = async ({ request }) => {
-  // Only accept submissions from this website
+  // Only accept submissions from this website. Vercel passes the visited address in
+  // x-forwarded-host, which can differ from the internal request URL.
   const origin = request.headers.get('origin');
-  if (origin && new URL(origin).host !== new URL(request.url).host) {
+  const host = request.headers.get('x-forwarded-host') ?? request.headers.get('host') ?? new URL(request.url).host;
+  if (origin && new URL(origin).host !== host) {
+    console.error('Enquiry refused: sent from another website.');
     return json(403, { ok: false });
   }
 
@@ -27,6 +30,7 @@ export const POST: APIRoute = async ({ request }) => {
   try {
     data = await request.json();
   } catch {
+    console.error('Enquiry refused: the request was not valid JSON.');
     return json(400, { ok: false, error: 'invalid' });
   }
 
@@ -46,7 +50,10 @@ export const POST: APIRoute = async ({ request }) => {
     enquiry.goals.includes(goal) &&
     message.length <= 1500 &&
     data.consent === true;
-  if (!valid) return json(400, { ok: false, error: 'invalid' });
+  if (!valid) {
+    console.error('Enquiry refused: the details did not pass the checks.');
+    return json(400, { ok: false, error: 'invalid' });
+  }
 
   if (!BREVO_API_KEY || !ENQUIRY_TO_EMAIL || !ENQUIRY_FROM_EMAIL) {
     console.error('Enquiry email is not configured (missing Brevo settings).');
