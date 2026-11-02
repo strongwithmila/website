@@ -13,8 +13,8 @@ import { faq } from '../content/site';
     <div>
       <!-- Native <details> accordions: keyboard and screen-reader friendly without extra scripts -->
       <div class="faq__list">
-        {faq.map((item, i) => (
-          <details class="faq__item" open={i === 0}>
+        {faq.map((item) => (
+          <details class="faq__item">
             <summary>
               <span class="faq__question">{item.question}</span>
               <span class="faq__icon" aria-hidden="true"></span>
