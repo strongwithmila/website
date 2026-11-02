@@ -214,7 +214,7 @@ export const testimonials = {
   heading: 'What working together can feel like',
   items: [
     {
-      // TODO(Mila): confirm N. has approved this lightly edited wording before launch.
+      // Wording approved by N. (2 Nov 2026).
       paragraphs: [
         'We all have struggles and doubts about food, exercise, and how to balance them with everyday life. Mila gives you the knowledge and practical tips to make that balance easier, while encouraging you to take the first steps towards change.',
         'She’s not just a coach; she’s a friend who genuinely celebrates your happiness and progress as you learn to take better care of your body.',
