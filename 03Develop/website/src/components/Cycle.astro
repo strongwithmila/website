@@ -1,54 +1,80 @@
 ---
 import { cycle } from '../content/site';
 
-// Labels sit evenly around the circle, like notebook annotations.
-const r = 150;
-const placed = cycle.labels.map((label, i) => {
-  const a = (i / cycle.labels.length) * Math.PI * 2 - Math.PI / 2;
-  return { label, x: 200 + Math.cos(a) * r, y: 200 + Math.sin(a) * r, dx: Math.cos(a), dy: Math.sin(a) };
+// "Your patterns" wheel, drawn in code (redrawn from 00Context/Images/Graphics/Your Patterns Wellness Wheel.png).
+// Six equal segments, starting with the one at the top and going clockwise.
+const C = 200; // centre of the 400 × 400 drawing
+const R_SEGMENTS = 176; // outer edge of the coloured segments
+const R_OUTER = 190; // plum outline
+const R_CENTRE = 58; // "your patterns" circle
+const R_LABEL = 118; // where each icon + label sits
+
+// Soft fills, alternating like the original graphic
+const fills = ['#efe0da', '#f5ece5', '#e8e3da', '#efe0da', '#f5ece5', '#e8e3da'];
+
+// Simple line icons on a 24 × 24 grid
+const icons: Record<string, string> = {
+  energy:
+    'M12 7a5 5 0 1 0 0 10a5 5 0 1 0 0-10M12 1v3M12 20v3M1 12h3M20 12h3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1',
+  appetite: 'M6 2v6a2.5 2.5 0 0 0 5 0V2M8.5 2v20M17.5 22V2c-2.2 1.6-3.3 4.6-3.3 8.5V14h3.3',
+  sleep: 'M19.5 15.5A8.5 8.5 0 1 1 9.5 3.5a7 7 0 0 0 10 12z',
+  recovery: 'M12 22v-9M12 13c0-4.5-3-7-7.5-7 0 4.5 3 7 7.5 7zM12 11c0-4.5 3-7 7.5-7 0 4.5-3 7-7.5 7z',
+  motivation: 'M13.5 1.5L5 13.5h6.5l-1.5 9 8.5-12h-6.5z',
+  mood: 'M2 8.5c3.3-3 6.7-3 10 0s6.7 3 10 0M2 15.5c3.3-3 6.7-3 10 0s6.7 3 10 0',
+};
+
+const point = (r: number, deg: number) => {
+  const a = (deg * Math.PI) / 180;
+  return [C + r * Math.cos(a), C + r * Math.sin(a)];
+};
+
+const segments = cycle.labels.map((label, i) => {
+  const mid = -90 + i * 60; // 0° = right, angles grow clockwise
+  const [x1, y1] = point(R_SEGMENTS, mid - 30);
+  const [x2, y2] = point(R_SEGMENTS, mid + 30);
+  const [lx, ly] = point(R_LABEL, mid);
+  return {
+    label,
+    fill: fills[i],
+    path: `M${C} ${C}L${x1} ${y1}A${R_SEGMENTS} ${R_SEGMENTS} 0 0 1 ${x2} ${y2}Z`,
+    icon: icons[label],
+    x: lx,
+    y: ly,
+  };
 });
 ---
 
-<section class="section" aria-labelledby="cycle-title">
+<!-- A closer look at the Understand pillar, placed straight after the method -->
+<section class="cycle-section" aria-labelledby="cycle-title">
   <div class="container cycle">
     <div class="cycle__copy">
-      <p class="eyebrow">Body literacy</p>
+      <p class="cycle__eyebrow">{cycle.eyebrow}</p>
       <h2 id="cycle-title">{cycle.heading}</h2>
       {cycle.paragraphs.map((p) => <p>{p}</p>)}
       <p class="cycle__tagline">{cycle.tagline}</p>
     </div>
 
     <figure class="cycle__diagram">
-      <svg viewBox="-70 0 540 400" role="img" aria-labelledby="cycle-diagram-title">
-        <title id="cycle-diagram-title">
-          A cycle wheel with patterns worth noticing: {cycle.labels.join(', ')}.
-        </title>
-        <circle cx="200" cy="200" r="100" fill="none" stroke="var(--navy)" stroke-width="1.2" />
-        <circle cx="200" cy="200" r="70" fill="none" stroke="var(--line)" stroke-dasharray="2 5" />
-        <text x="200" y="196" text-anchor="middle" font-family="var(--font-serif)" font-size="17" fill="var(--navy)">your</text>
-        <text x="200" y="218" text-anchor="middle" font-family="var(--font-serif)" font-size="17" fill="var(--navy)">patterns</text>
-        {placed.map((p) => (
-          <g>
-            <line
-              x1={200 + p.dx * 100}
-              y1={200 + p.dy * 100}
-              x2={200 + p.dx * 128}
-              y2={200 + p.dy * 128}
-              stroke="var(--navy)"
-              stroke-width="1"
-            />
-            <circle cx={200 + p.dx * 100} cy={200 + p.dy * 100} r="4" fill="var(--navy)" />
-            <text
-              x={p.x}
-              y={p.y + 5}
-              text-anchor={Math.abs(p.dx) < 0.2 ? 'middle' : p.dx > 0 ? 'start' : 'end'}
-              font-family="var(--font-sans)"
-              font-size="14"
-              letter-spacing="1"
-              fill="var(--brown)"
-            >
-              {p.label}
-            </text>
+      <svg class="wheel" viewBox="0 0 400 400" role="img" aria-labelledby="wheel-title wheel-desc">
+        <title id="wheel-title">Your patterns</title>
+        <desc id="wheel-desc">
+          An illustrative wheel of everyday signals worth noticing: {cycle.labels.join(', ')}. It shows
+          observations, not a medical cycle chart.
+        </desc>
+
+        <!-- Light ring between the segments and the plum outline -->
+        <circle cx={C} cy={C} r={R_OUTER} class="wheel__ring" />
+        {segments.map((s) => <path d={s.path} fill={s.fill} class="wheel__segment" />)}
+        <circle cx={C} cy={C} r={R_OUTER} class="wheel__outline" />
+
+        <circle cx={C} cy={C} r={R_CENTRE} class="wheel__centre" />
+        <text x={C} y={C - 4} class="wheel__centre-text wheel__centre-text--small">your</text>
+        <text x={C} y={C + 20} class="wheel__centre-text">patterns</text>
+
+        {segments.map((s) => (
+          <g aria-hidden="true">
+            <path d={s.icon} class="wheel__icon" transform={`translate(${s.x - 17} ${s.y - 40}) scale(1.4)`} />
+            <text x={s.x} y={s.y + 20} class="wheel__label">{s.label}</text>
           </g>
         ))}
       </svg>
@@ -57,33 +83,122 @@ const placed = cycle.labels.map((label, i) => {
 </section>
 
 <style>
+  /* Cream, to set it apart from the off-white method section above */
+  .cycle-section {
+    background: var(--cream);
+    padding-top: clamp(3.5rem, 7vw, 5.5rem);
+  }
+  /* Fine rule closing the feature before the package, which shares the cream background */
+  .cycle-section::after {
+    content: '';
+    display: block;
+    width: min(var(--max), 100%);
+    max-width: calc(100% - 2 * var(--gutter));
+    margin: clamp(3.5rem, 7vw, 5.5rem) auto 0;
+    border-top: 1px solid var(--line);
+  }
   .cycle {
     display: grid;
-    gap: clamp(2rem, 6vw, 4rem);
+    gap: clamp(2.5rem, 6vw, 3.5rem);
     align-items: center;
   }
+  /* Navy ties the feature to the Understand pillar */
+  .cycle__eyebrow {
+    margin: 0 0 1rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--navy);
+  }
+  h2 {
+    margin: 0 0 1.5rem;
+    font-size: clamp(2.1rem, 1.6rem + 2vw, 3.1rem);
+    font-weight: 400;
+    line-height: 1.1;
+    color: var(--plum);
+    text-wrap: balance;
+  }
+  .cycle__copy > p:not(.cycle__eyebrow, .cycle__tagline) {
+    max-width: 34rem;
+    margin: 0 0 1.1rem;
+    line-height: 1.75;
+  }
   .cycle__tagline {
-    margin-top: 1.75rem;
+    max-width: 30rem;
+    margin: 1.75rem 0 0;
     padding-left: 1rem;
-    border-left: 3px solid var(--navy);
+    border-left: 2px solid var(--navy);
     font-family: var(--font-serif);
-    font-size: clamp(1.3rem, 1.1rem + 1vw, 1.75rem);
-    line-height: 1.3;
+    font-style: italic;
+    font-size: clamp(1.25rem, 1.1rem + 0.6vw, 1.5rem);
+    line-height: 1.35;
     color: var(--navy);
   }
   .cycle__diagram {
     margin: 0;
-    max-width: 24rem;
     width: 100%;
+    max-width: 21rem;
     justify-self: center;
-    overflow: visible;
   }
-  .cycle__diagram svg {
-    overflow: visible;
+
+  /* The wheel */
+  .wheel {
+    display: block;
+    width: 100%;
+    height: auto;
   }
+  .wheel__ring {
+    fill: #faf5f0;
+  }
+  /* Thin light gaps between the segments */
+  .wheel__segment {
+    stroke: #fbf8f4;
+    stroke-width: 2.5;
+    stroke-linejoin: round;
+  }
+  .wheel__outline {
+    fill: none;
+    stroke: var(--plum);
+    stroke-width: 1.4;
+  }
+  .wheel__centre {
+    fill: #faf5f0;
+    stroke: var(--plum);
+    stroke-width: 1.2;
+  }
+  .wheel__centre-text,
+  .wheel__label {
+    font-family: var(--font-serif);
+    text-anchor: middle;
+    fill: var(--plum);
+  }
+  .wheel__centre-text {
+    font-size: 21px;
+  }
+  .wheel__centre-text--small {
+    font-style: italic;
+  }
+  .wheel__label {
+    font-size: 17px;
+    font-style: italic;
+  }
+  .wheel__icon {
+    fill: none;
+    stroke: var(--plum);
+    stroke-width: 0.9;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  /* Desktop: about 55% text, 45% wheel, centred against each other */
   @media (min-width: 56rem) {
     .cycle {
-      grid-template-columns: 1.2fr 1fr;
+      grid-template-columns: 52% 42%;
+      justify-content: space-between;
+    }
+    .cycle__diagram {
+      max-width: 28rem;
     }
   }
 </style>

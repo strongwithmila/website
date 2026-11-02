@@ -203,13 +203,14 @@ export const about = {
 };
 
 export const cycle = {
-  heading: 'Cycle-aware, not cycle-obsessed',
+  eyebrow: 'A closer look at Understand',
+  heading: 'Cycle-aware, not cycle-obsessed.',
   paragraphs: [
-    'Cycle-aware coaching doesn’t mean changing your entire workout and food routine every week.',
-    'It means noticing patterns in your energy, appetite, recovery, sleep and motivation, then using that information to make sensible adjustments.',
-    'Tracking is always optional. It works with irregular cycles, hormonal contraception, or no tracking at all.',
+    'Your energy, recovery and appetite can change. Understanding your individual patterns can help you make thoughtful adjustments to training and nutrition—without following rigid rules.',
+    'Tracking is always optional. Your experience matters more than a predetermined cycle calendar.',
   ],
-  tagline: 'Your cycle is data, not a rulebook.',
+  tagline: 'Your cycle is information, not instructions.',
+  // The six signals in the "your patterns" wheel (drawn in components/Cycle.astro)
   labels: ['energy', 'appetite', 'sleep', 'recovery', 'motivation', 'mood'],
 };
 
