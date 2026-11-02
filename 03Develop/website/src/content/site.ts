@@ -216,37 +216,50 @@ export const cycle = {
 
 export const faq: FaqItem[] = [
   {
-    question: 'Do I need experience with strength training?',
-    answer: 'No. This coaching is especially suited to beginners and women returning to training. We start where you are.',
+    question: 'I’m a complete beginner. Is this coaching for me?',
+    answer:
+      'Absolutely. You don’t need to know your way around the gym or have an established training routine before we start. Our first sessions focus on understanding your starting point, learning good technique and building confidence at your own pace. You don’t need to get fit before asking for support.',
   },
   {
-    question: 'Where do the onsite sessions happen?',
-    answer: 'In Berlin. The exact studio or gym will be confirmed and shared with you before you start.',
+    question: 'What does the four-week coaching package include?',
+    answer:
+      'We start with a virtual goal-setting call, followed by three onsite personal training sessions in Berlin. You’ll also receive nutrition coaching, a training direction tailored to your needs, weekly digital check-ins and a final onsite progression review. We’ll use your feedback to make adjustments along the way, including cycle-aware support if it’s relevant to you.',
+  },
+  {
+    question: 'What if I have a busy schedule or struggle with consistency?',
+    answer:
+      'That’s exactly why we look at your real-life routine before creating a plan. Your coaching should work around your time, energy and responsibilities—not depend on every week going perfectly. Through our check-ins, we’ll review what’s working and make realistic adjustments when life gets busy.',
+  },
+  {
+    question: 'Will I have to follow a diet or track calories?',
+    answer:
+      'No strict diets or mandatory calorie tracking. Nutrition coaching is about finding useful structure without making food another source of stress. We might explore meal routines, protein, energy needs or food tracking when appropriate, but the approach is flexible and based on what works for you. Practical meal suggestions are part of that support.',
+  },
+  {
+    question: 'Do I have to track my menstrual cycle?',
+    answer:
+      'Not at all. Cycle awareness is an optional part of our body-literacy approach, not a requirement. We can explore patterns in your energy, appetite, sleep, recovery and training without prescribing different routines for each menstrual phase. You can also participate if your cycles are irregular, you use hormonal contraception or you simply prefer not to track.',
+  },
+  {
+    question: 'Where does the training take place? Is coaching available online?',
+    answer:
+      'The in-person sessions take place in Berlin, with the exact training location confirmed before you begin. The package combines onsite training with digital check-ins and support between sessions. Because the in-person sessions are an important part of building your training foundation, this particular package isn’t designed as a fully online programme.',
   },
   {
     question: 'Is this a weight-loss programme?',
-    answer: 'Not specifically. The focus is strength, structure, nutrition habits and confidence. Body composition goals can be discussed, but the approach is never extreme or restrictive.',
+    answer:
+      'Strong with Mila is centred on building strength, improving your relationship with training and food, and understanding your body better—not chasing a number on the scale. If changes in body composition are among your goals, we can discuss them without making restriction, guilt or quick fixes the foundation of your coaching.',
   },
   {
-    question: 'Do you provide meal plans?',
-    answer: 'I provide realistic meal suggestions, food priorities and macro-informed meal structure rather than a strict meal plan. I don’t provide medical diet plans.',
+    question: 'Can you help with PCOS, endometriosis or other hormonal conditions?',
+    answer:
+      'I can support you with general strength training, nutrition habits and body awareness, but I don’t diagnose or treat medical or hormonal conditions. If you have PCOS, endometriosis, a thyroid condition or another medical concern, your healthcare professional should guide the medical side of your care. We can discuss how general coaching may fit alongside their advice.',
   },
   {
-    question: 'Can you help with PCOS, endometriosis, thyroid issues or fertility?',
-    answer: 'I can support general training and lifestyle habits, but I don’t diagnose or treat medical conditions. For clinical concerns, I’ll recommend working with a doctor or registered dietitian alongside coaching.',
-  },
-  {
-    question: 'Is this only for women with regular cycles?',
-    answer: 'No. Cycle-aware support can include noticing energy, appetite, recovery and symptoms, and tracking is optional. It works with irregular cycles, hormonal contraception or no period at all.',
-  },
-  {
-    question: 'How much does it cost?',
+    question: 'How much does coaching cost, and how do I get started?',
     // TODO(Mila): update once pricing is confirmed.
-    answer: 'Pricing is shared personally after a short fit check, so you know exactly what’s included before you decide.',
-  },
-  {
-    question: 'How can I get in touch?',
-    answer: `Use the enquiry form below, email ${contact.email}, or send a message on Instagram at @${contact.instagramHandle}.`,
+    answer:
+      'The four-week package is a personalised coaching experience combining onsite training, nutrition guidance and ongoing support. Pricing is shared after a short fit check so you can understand the package and ask questions before deciding. To get started, simply complete the enquiry form and share a little about your goals.',
   },
 ];
 
