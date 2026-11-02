@@ -56,7 +56,11 @@ export const POST: APIRoute = async ({ request }) => {
   }
 
   if (!BREVO_API_KEY || !ENQUIRY_TO_EMAIL || !ENQUIRY_FROM_EMAIL) {
-    console.error('Enquiry email is not configured (missing Brevo settings).');
+    // Names only, never the values
+    const missing = Object.entries({ BREVO_API_KEY, ENQUIRY_TO_EMAIL, ENQUIRY_FROM_EMAIL })
+      .filter(([, value]) => !value)
+      .map(([key]) => key);
+    console.error(`Enquiry email is not configured. Missing in Vercel: ${missing.join(', ')}.`);
     return json(503, { ok: false });
   }
 
