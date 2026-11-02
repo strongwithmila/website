@@ -1,11 +1,11 @@
 import { defineConfig, envField } from 'astro/config';
 import vercel from '@astrojs/vercel';
 
-// SITE_URL: the site's domain (used for canonical URL and social tags).
+// SITE_URL: the site's domain (used for canonical URL and social tags). Defaults to the
+// current Vercel address; set SITE_URL in Vercel once a custom domain is connected.
 // BASE_PATH: the sub-folder the site lives in, e.g. '/my-portfolio' on GitHub Pages.
-// Both are set automatically by the GitHub Pages workflow; leave them empty locally.
 export default defineConfig({
-  site: process.env.SITE_URL || undefined,
+  site: process.env.SITE_URL || 'https://strong-website.vercel.app',
   base: process.env.BASE_PATH || '/',
   // Pages stay static; only /api/enquiry runs as a small server function on Vercel.
   adapter: vercel(),

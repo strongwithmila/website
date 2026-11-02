@@ -30,9 +30,16 @@ export const contact = {
 export const instagramUrl = `https://www.instagram.com/${contact.instagramHandle}/`;
 
 export const seo = {
-  title: 'Strong with Mila | Women’s Strength & Nutrition Coaching in Berlin',
+  // Browser tab and Google
+  title: 'Strong with Mila | Women’s Strength Coaching',
   description:
-    'Women-focused personal training, nutrition coaching and cycle-aware support in Berlin, in English. Build strength, structure and confidence without extremes.',
+    'Build strength and confidence with personal training, practical nutrition and body literacy. Supportive, personalised coaching for women in Berlin.',
+  // Link previews (WhatsApp, Instagram, LinkedIn, X…)
+  ogTitle: 'Strong with Mila | Build Strength. Understand Your Body.',
+  ogDescription:
+    'Personal strength training, practical nutrition and body literacy for women in Berlin. A supportive approach to getting stronger.',
+  ogImage: '/og-image.jpg', // 1200 × 630, in public/
+  ogImageAlt: 'Strong with Mila logo and the words “Build strength. Understand your body.” beside a photo of Mila',
 };
 
 /**

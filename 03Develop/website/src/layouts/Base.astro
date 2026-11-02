@@ -14,6 +14,12 @@ interface Props {
 
 const { title = seo.title, description = seo.description, noindex = false } = Astro.props;
 const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site).href : undefined;
+// The homepage uses the dedicated sharing copy; other pages share their own title and description
+const isHome = !Astro.props.title;
+const ogTitle = isHome ? seo.ogTitle : title;
+const ogDescription = isHome ? seo.ogDescription : description;
+// Social sites need a full address for the image
+const ogImage = Astro.site ? new URL(url(seo.ogImage), Astro.site).href : url(seo.ogImage);
 ---
 
 <!doctype html>
@@ -31,11 +37,20 @@ const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site).href : un
     <link rel="apple-touch-icon" href={url('/apple-touch-icon.png')} />
 
     <meta property="og:type" content="website" />
-    <meta property="og:title" content={title} />
-    <meta property="og:description" content={description} />
+    <meta property="og:site_name" content="Strong with Mila" />
+    <meta property="og:title" content={ogTitle} />
+    <meta property="og:description" content={ogDescription} />
     <meta property="og:locale" content="en_GB" />
     {canonical && <meta property="og:url" content={canonical} />}
-    <meta name="twitter:card" content="summary" />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={seo.ogImageAlt} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={ogTitle} />
+    <meta name="twitter:description" content={ogDescription} />
+    <meta name="twitter:image" content={ogImage} />
+    <meta name="twitter:image:alt" content={seo.ogImageAlt} />
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
