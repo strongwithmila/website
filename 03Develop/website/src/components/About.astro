@@ -5,6 +5,12 @@ import { about } from '../content/site';
 
 <section class="section section--alt" id="about" aria-labelledby="about-title">
   <div class="container about">
+    <!-- Phones: heading, portrait, then story. Desktop: portrait on the left, heading and story on the right. -->
+    <header class="about__head">
+      <p class="about__eyebrow">{about.eyebrow}</p>
+      <h2 id="about-title">{about.heading}</h2>
+    </header>
+
     <figure class="about__media">
       {about.photo ? (
         <div class="about__frame">
@@ -13,32 +19,27 @@ import { about } from '../content/site';
             alt={about.photoAlt}
             formats={['avif', 'webp']}
             fallbackFormat="jpg"
-            widths={[400, 600, 800]}
-            sizes="(min-width: 56rem) 24rem, 90vw"
+            widths={[400, 600, 800, 1087]}
+            sizes="(min-width: 56rem) 38vw, 90vw"
           />
         </div>
       ) : (
         <div class="about__placeholder" role="img" aria-label="Photo of Mila coming soon">
-          <svg viewBox="0 0 200 250" fill="none" stroke="var(--plum)" stroke-width="1.2" aria-hidden="true">
-            <circle cx="100" cy="80" r="34" />
-            <path d="M40 230c0-46 27-80 60-80s60 34 60 80" />
-            <path d="M140 40c14 8 22 20 24 34" stroke="var(--clay)" stroke-dasharray="3 5" />
-          </svg>
           <span>Photo coming soon</span>
         </div>
       )}
-      <figcaption class="script-note">{about.note}</figcaption>
+      {about.note && <figcaption class="script-note">{about.note}</figcaption>}
     </figure>
 
-    <div class="about__copy">
-      <p class="eyebrow">About</p>
-      <h2 id="about-title">{about.heading}</h2>
-      {about.paragraphs.map((p, i) => <p class={i === 0 ? 'lead about__first' : undefined}>{p}</p>)}
+    <div class="about__body">
+      <p class="about__opening">{about.opening}</p>
+      {about.paragraphs.map((p) => <p>{p}</p>)}
       {about.credentials.length > 0 && (
         <ul class="about__creds">
           {about.credentials.map((c) => <li>{c}</li>)}
         </ul>
       )}
+      <p class="about__philosophy">{about.philosophy}</p>
     </div>
   </div>
 </section>
@@ -46,87 +47,123 @@ import { about } from '../content/site';
 <style>
   .about {
     display: grid;
-    gap: clamp(2rem, 6vw, 4.5rem);
-    align-items: center;
+    grid-template-areas: 'head' 'media' 'body';
+  }
+  .about__head {
+    grid-area: head;
   }
   .about__media {
-    margin: 0;
-    max-width: 24rem;
+    grid-area: media;
+  }
+  .about__body {
+    grid-area: body;
+  }
+
+  .about__eyebrow {
+    margin: 0 0 1rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgb(58 42 36 / 0.78);
+  }
+  h2 {
+    margin: 0 0 2rem;
+    font-size: clamp(2.6rem, 1.8rem + 2.6vw, 4rem);
+    font-weight: 400;
+    line-height: 1.05;
+    letter-spacing: -0.015em;
+    color: var(--plum);
+  }
+
+  /* Portrait: the photo's own 3:4 proportions, with an arched top and one fine plum line */
+  .about__media {
+    margin: 0 0 2.5rem;
     width: 100%;
+    /* Large enough to feel personal without filling the whole phone screen */
+    max-width: 18rem;
     justify-self: center;
     text-align: center;
   }
-  .about__media :global(img),
-  .about__placeholder {
-    width: 100%;
-    aspect-ratio: 4 / 5;
-    object-fit: cover;
-    border-radius: 12rem 12rem var(--radius) var(--radius);
-  }
-  .about__media :global(img) {
-    display: block;
-    height: auto;
-    object-position: 50% 35%;
-  }
-  /* Decorative deep plum lines framing the arch */
   .about__frame {
     position: relative;
-    isolation: isolate;
-    margin: 1.25rem 1.25rem 2rem;
+    padding: 0.55rem;
+    border: 1px solid rgb(75 31 59 / 0.55);
+    border-radius: 50% 50% calc(var(--radius) + 0.55rem) calc(var(--radius) + 0.55rem) / 37.5% 37.5% calc(var(--radius) + 0.55rem) calc(var(--radius) + 0.55rem);
   }
-  .about__frame::before,
-  .about__frame::after {
-    content: '';
-    position: absolute;
-    pointer-events: none;
-    border: 1.5px solid var(--plum);
-    border-radius: 13rem 13rem calc(var(--radius) + 0.6rem) calc(var(--radius) + 0.6rem);
-  }
-  /* Fine outline just around the photo */
-  .about__frame::before {
-    inset: -0.6rem;
-  }
-  /* Second outline, shifted down and to the right */
-  .about__frame::after {
-    inset: -0.6rem;
-    transform: translate(1rem, 1rem);
-    z-index: -1;
-  }
-  .about__frame :global(picture) {
-    position: relative;
+  .about__media :global(img),
+  .about__placeholder {
     display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 3 / 4;
+    object-fit: cover;
+    /* Semicircular top: horizontal radius is half the width, vertical radius the same length (3/8 of the height) */
+    border-radius: 50% 50% var(--radius) var(--radius) / 37.5% 37.5% var(--radius) var(--radius);
   }
   .about__placeholder {
     display: grid;
     place-items: center;
-    align-content: center;
-    gap: 0.75rem;
     background: var(--cream);
-    border: 1px solid var(--line);
     font-size: 0.8rem;
     letter-spacing: 0.1em;
     text-transform: uppercase;
   }
-  .about__placeholder svg {
-    width: 55%;
-  }
   .about__media .script-note {
     margin-top: 1rem;
+    font-size: 1.7rem;
   }
-  .about__first {
+
+  .about__opening {
+    margin: 0 0 1.5rem;
     font-family: var(--font-serif);
     font-style: italic;
+    font-size: clamp(1.3rem, 1.15rem + 0.6vw, 1.6rem);
+    line-height: 1.35;
     color: var(--plum);
-    font-size: 1.3rem;
-    line-height: 1.4;
+    text-wrap: balance;
+  }
+  .about__body > p:not(.about__opening, .about__philosophy) {
+    max-width: 34rem;
+    margin: 0 0 1.1rem;
+    font-size: 1rem;
+    line-height: 1.75;
+    color: var(--brown);
+  }
+  .about__philosophy {
+    max-width: 30rem;
+    margin: 2rem 0 0;
+    padding-top: 1.75rem;
+    border-top: 1px solid rgb(75 31 59 / 0.3);
+    font-family: var(--font-serif);
+    font-size: clamp(1.15rem, 1.05rem + 0.4vw, 1.35rem);
+    line-height: 1.45;
+    color: var(--plum);
   }
   .about__creds {
     padding-left: 1.1rem;
     font-size: 0.95rem;
   }
+
+  /* Desktop: portrait about 42% on the left, text about 53% on the right, centred against each other */
   @media (min-width: 56rem) {
     .about {
-      grid-template-columns: 1fr 1.3fr;
+      grid-template-columns: 42% 53%;
+      grid-template-rows: auto auto;
+      grid-template-areas: 'media head' 'media body';
+      justify-content: space-between;
+      align-content: center;
+    }
+    .about__head {
+      align-self: end;
+    }
+    .about__body {
+      align-self: start;
+    }
+    .about__media {
+      max-width: 27rem;
+      margin: 0;
+      align-self: center;
     }
   }
 </style>

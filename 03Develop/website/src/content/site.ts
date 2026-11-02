@@ -187,13 +187,15 @@ export const fit = {
  * To change the photo, replace src/assets/mila-portrait.png (or import another image) and update `photoAlt`.
  */
 export const about = {
-  heading: 'Hi, I’m Mila',
+  eyebrow: 'A little about me',
+  heading: 'Hi, I’m Mila.',
+  opening: 'I learned that lasting change starts with support, not more pressure.',
   paragraphs: [
-    'For most of my life, I was health-conscious, but still struggling.',
-    'I cared about eating well, building routines and feeling good in my body, but weight management and consistency never felt simple. After years of dieting, I reached a point where I knew I needed real support.',
-    'Working with a personal trainer and a nutritionist helped me build structure, strength and confidence in a way motivation alone never could.',
-    'Now I’m building Strong with Mila to help other women feel supported in that same process, with training, nutrition and body literacy that feel realistic, not extreme.',
+    'For years, I cared about my health but struggled to find consistency with food, training and my routines. After a long cycle of dieting and trying to figure everything out myself, I realised I needed a different approach.',
+    'Working with a personal trainer and nutritionist showed me what the right guidance could do. I started building strength, finding structure and feeling more confident in my body.',
+    'That experience inspired Strong with Mila: a space where women can learn to train confidently, approach nutrition without extremes, and better understand their bodies—with guidance that fits their real lives.',
   ],
+  philosophy: 'I believe the plan should fit the person, not the other way around.',
   note: 'support changed everything',
   photo: aboutPhoto as ImageMetadata | null,
   photoAlt: 'Mila sitting on a sofa at home, resting her chin on her hand and smiling.',
