@@ -1,14 +1,15 @@
-/* Provisional design tokens from the website design brief — awaiting Mila's visual QA. */
+/* Brand colours (brand board codes, approved by Mila 2 Nov 2026). Helper tints such as
+   --plum-hover, --white and see-through browns are approved shades of these. */
 :root {
   --cream: #f7f3ee;
   --offwhite: #ede7e1;
   --plum: #4b1f3b;
   --plum-hover: #3a172d;
-  --brown: #3a2a24;
-  --navy: #26364a;
+  --brown: #4a332c;
+  --navy: #2f3b4a;
   --forest: #3f5f4a;
-  --burgundy: #8a3f4d;
-  --clay: #c47a5a; /* decorative only: below 4.5:1 on cream, never for text */
+  --burgundy: #7a2e3a;
+  --clay: #c68876; /* decorative only: below 4.5:1 on cream, never for text */
   --line: rgb(75 31 59 / 0.18);
   --white: #fffdfa;
 
@@ -63,6 +64,11 @@ body {
   }
 }
 
+/* Buttons don't inherit the page font by default */
+button {
+  font-family: inherit;
+}
+
 img,
 svg {
   display: block;
@@ -74,14 +80,15 @@ h2,
 h3 {
   font-family: var(--font-serif);
   color: var(--plum);
-  font-weight: 500;
-  line-height: 1.15;
+  font-weight: 400;
+  line-height: 1.12;
   margin: 0 0 1rem;
   text-wrap: balance;
 }
 
+/* One size for every section headline */
 h2 {
-  font-size: clamp(2rem, 1.4rem + 2.6vw, 3.1rem);
+  font-size: clamp(2.1rem, 1.6rem + 2vw, 3.1rem);
 }
 
 h3 {
@@ -139,13 +146,14 @@ a {
   font-size: 1.1em;
 }
 
+/* Small label above section headings: soft, widely spaced brown capitals */
 .eyebrow {
   display: inline-block;
-  font-size: 0.78rem;
-  font-weight: 600;
-  letter-spacing: 0.14em;
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: var(--plum);
+  color: rgb(74 51 44 / 0.78);
   margin-bottom: 1rem;
 }
 
