@@ -103,9 +103,14 @@ const endpoint = import.meta.env.PUBLIC_FORM_ENDPOINT ?? url('/api/enquiry');
       </form>
 
       <div class="form__done" id="form-done" tabindex="-1" hidden>
-        <Icon name="check" size={40} />
-        <h3 id="form-done-title">Thank you</h3>
-        <p id="form-done-text"></p>
+        <span class="form__done-icon" aria-hidden="true"><Icon name="check" size={26} /></span>
+        <h3 id="form-done-title">{enquiry.success.heading}</h3>
+        <div class="form__done-text" id="form-done-text">
+          {enquiry.success.paragraphs.map((p) => <p>{p}</p>)}
+        </div>
+        <button class="btn btn--primary form__done-close" type="button" data-close-enquiry>
+          {enquiry.success.buttonLabel}
+        </button>
       </div>
     </div>
   </div>
@@ -149,13 +154,24 @@ const endpoint = import.meta.env.PUBLIC_FORM_ENDPOINT ?? url('/api/enquiry');
         start?.focus();
       }),
     );
-    dialog.querySelector('.enquiry-dialog__close')?.addEventListener('click', () => dialog.close());
+    dialog
+      .querySelectorAll('.enquiry-dialog__close, [data-close-enquiry]')
+      .forEach((btn) => btn.addEventListener('click', () => dialog.close()));
     // Clicking the dimmed area outside the box closes it too (Escape is handled by the browser)
     dialog.addEventListener('click', (e) => {
       if (e.target === dialog) dialog.close();
     });
     // Return focus to the button that opened the form
     dialog.addEventListener('close', () => trigger?.focus());
+  }
+
+  // Swap the form for the thank-you message and hide the form heading
+  function showDone() {
+    form!.hidden = true;
+    done!.hidden = false;
+    dialog?.classList.add('is-done');
+    dialog?.setAttribute('aria-labelledby', 'form-done-title');
+    done!.focus();
   }
 
   if (form && errorsBox && done && doneText) {
@@ -205,10 +221,8 @@ const endpoint = import.meta.env.PUBLIC_FORM_ENDPOINT ?? url('/api/enquiry');
         const body = `Hi Mila,\n\nName: ${payload.name}\nGoal: ${payload.goal}\n\n${payload.message}\n\n(I agree you may use these details to reply to my enquiry.)`;
         const href = `mailto:${form.dataset.email}?subject=${encodeURIComponent('Coaching enquiry from ' + payload.name)}&body=${encodeURIComponent(body)}`;
         window.location.href = href;
-        doneText.innerHTML = `Your email app should now open with your message ready to send. Nothing opened? Email <a href="mailto:${form.dataset.email}">${form.dataset.email}</a> directly.`;
-        form.hidden = true;
-        done.hidden = false;
-        done.focus();
+        doneText.innerHTML = `<p>Your email app should now open with your message ready to send. Nothing opened? Email <a href="mailto:${form.dataset.email}">${form.dataset.email}</a> directly.</p>`;
+        showDone();
         return;
       }
 
@@ -221,11 +235,9 @@ const endpoint = import.meta.env.PUBLIC_FORM_ENDPOINT ?? url('/api/enquiry');
           headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
           body: JSON.stringify(payload),
         });
+        // Only show the thank-you message once the server confirms the email was sent
         if (!res.ok) throw new Error(String(res.status));
-        doneText.textContent = `Your enquiry is on its way, and I’m glad you reached out. I’ll reply personally to ${payload.email}.`;
-        form.hidden = true;
-        done.hidden = false;
-        done.focus();
+        showDone();
       } catch {
         errorsBox.innerHTML = `<p>Sorry, your message couldn’t be sent just now. Please try again, or email <a href="mailto:${form.dataset.email}">${form.dataset.email}</a>.</p>`;
         errorsBox.hidden = false;
@@ -436,12 +448,45 @@ const endpoint = import.meta.env.PUBLIC_FORM_ENDPOINT ?? url('/api/enquiry');
     text-align: center;
   }
   .form__done {
+    padding-block: 0.25rem 0.75rem;
     text-align: center;
-    padding-block: 2rem;
   }
-  .form__done :global(svg) {
+  .form__done:focus {
+    outline: none;
+  }
+  /* Small forest-green tick in a fine circle */
+  .form__done-icon {
+    display: grid;
+    place-items: center;
+    width: 3rem;
+    height: 3rem;
+    margin: 0 auto 1.25rem;
+    border: 1.5px solid var(--forest);
+    border-radius: 50%;
     color: var(--forest);
-    margin: 0 auto 1rem;
+  }
+  .form__done h3 {
+    margin: 0 0 1rem;
+    font-size: clamp(1.6rem, 1.4rem + 1vw, 2rem);
+    color: var(--plum);
+  }
+  .form__done-text :global(p) {
+    max-width: 26rem;
+    margin: 0 auto 0.9rem;
+    line-height: 1.7;
+    color: var(--brown);
+  }
+  .form__done-close {
+    margin-top: 1.25rem;
+    min-width: 14rem;
+  }
+  /* Thank-you state: no form heading, just the close button in the corner */
+  .enquiry-dialog.is-done .enquiry-dialog__head {
+    justify-content: flex-end;
+    padding-bottom: 0;
+  }
+  .enquiry-dialog.is-done .enquiry-dialog__head h2 {
+    display: none;
   }
 
   .enquiry-dialog {
@@ -457,9 +502,10 @@ const endpoint = import.meta.env.PUBLIC_FORM_ENDPOINT ?? url('/api/enquiry');
     overflow-y: auto;
     overscroll-behavior: contain;
   }
-  /* Phones: the form fills the screen and scrolls naturally */
+  /* Phones: the form fills the screen and scrolls naturally;
+     the short thank-you message goes back to a compact box */
   @media (max-width: 40rem) {
-    .enquiry-dialog {
+    .enquiry-dialog:not(.is-done) {
       width: 100%;
       height: 100dvh;
       max-height: none;

@@ -295,6 +295,15 @@ export const enquiry = {
   reassurance: 'No commitment. Just a first conversation.',
   // Heading at the top of the pop-up form
   formHeading: 'Start with a conversation',
+  // Shown in the pop-up once the enquiry has been sent
+  success: {
+    heading: 'Thank you for reaching out!',
+    paragraphs: [
+      'Your enquiry has been sent successfully. I’m looking forward to learning more about you and your goals.',
+      'I’ll be in touch personally by email to explore our next steps together.',
+    ],
+    buttonLabel: 'Back to the website',
+  },
   goals: [
     'Build strength & confidence in the gym',
     'Return to training after a break',
