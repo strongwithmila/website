@@ -3,10 +3,13 @@ import Icon from './Icon.astro';
 import { fit } from '../content/site';
 ---
 
-<section class="section" aria-labelledby="fit-title">
+<!-- Fit / boundaries section: full-width deep plum band with two cream cards -->
+<section class="section fit-section" aria-labelledby="fit-title">
   <div class="container">
     <div class="section-head section-head--center">
+      <p class="eyebrow">{fit.eyebrow}</p>
       <h2 id="fit-title">{fit.heading}</h2>
+      <p class="lead">{fit.intro}</p>
     </div>
 
     <div class="fit">
@@ -25,28 +28,47 @@ import { fit } from '../content/site';
     </div>
 
     <p class="scope"><strong>Scope:</strong> {fit.scopeNote}</p>
+
+    <div class="fit__action">
+      <a class="btn fit__cta" href="#enquire" data-open-enquiry>{fit.ctaLabel}</a>
+    </div>
   </div>
 </section>
 
 <style>
+  .fit-section {
+    background: var(--plum);
+    color: var(--cream);
+  }
+  .fit-section .eyebrow {
+    color: rgb(247 243 238 / 0.75);
+  }
+  .fit-section h2 {
+    color: var(--cream);
+  }
+  .fit-section .lead {
+    margin: 0 auto;
+    max-width: 36rem;
+    color: rgb(247 243 238 / 0.85);
+  }
   .fit {
     display: grid;
     gap: 1.25rem;
   }
   .fit__col {
-    padding: clamp(1.75rem, 4vw, 2.25rem);
+    padding: clamp(1.75rem, 4vw, 2.5rem);
     border-radius: var(--radius);
-    border: 1px solid var(--line);
-    background: var(--white);
+    background: var(--cream);
+    color: var(--brown);
   }
   .fit__col--yes {
     --accent: var(--forest);
   }
   .fit__col--no {
     --accent: var(--burgundy);
-    background: transparent;
   }
   .fit h3 {
+    margin: 0 0 1.25rem;
     color: var(--accent);
   }
   .fit ul {
@@ -57,7 +79,8 @@ import { fit } from '../content/site';
   .fit li {
     display: flex;
     gap: 0.65rem;
-    padding: 0.4rem 0;
+    padding: 0.7rem 0;
+    border-top: 1px solid var(--line);
     font-size: 0.97rem;
   }
   .fit li :global(svg) {
@@ -67,9 +90,35 @@ import { fit } from '../content/site';
   }
   .scope {
     max-width: 44rem;
-    margin: 2rem auto 0;
+    margin: 2.25rem auto 0;
     text-align: center;
     font-size: 0.92rem;
+    color: rgb(247 243 238 / 0.85);
+  }
+  .scope strong {
+    color: var(--cream);
+  }
+  .fit__action {
+    margin-top: 2rem;
+    text-align: center;
+  }
+  /* Light button so it stands out on the plum background */
+  .fit__cta {
+    background: var(--cream);
+    border-color: var(--cream);
+    color: var(--plum);
+  }
+  .fit__cta:hover {
+    background: transparent;
+    color: var(--cream);
+  }
+  .fit__cta:focus-visible {
+    outline-color: var(--cream);
+  }
+  @media (max-width: 30rem) {
+    .fit__cta {
+      width: 100%;
+    }
   }
   @media (min-width: 52rem) {
     .fit {

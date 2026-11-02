@@ -158,25 +158,27 @@ export const offer = {
 };
 
 export const fit = {
-  heading: 'Is this coaching for you?',
+  eyebrow: 'Who this is for',
+  heading: 'A supportive fit for the right woman.',
+  intro:
+    'This coaching works best for women who want strength, structure and a realistic approach — not extremes.',
   forYou: [
-    'You’re a woman in Berlin who prefers coaching in English',
-    'You want to start or return to strength training safely',
-    'You want personal guidance with technique',
-    'You want realistic nutrition support',
-    'You’re tired of all-or-nothing dieting',
-    'You want to understand your cycle without obsessing over it',
-    'You want structure and accountability',
+    'You live in Berlin and want in-person coaching support',
+    'You want to start or return to strength training with guidance',
+    'You want nutrition support without restrictive dieting',
+    'You value structure, accountability and a plan that fits real life',
+    'You want to better understand your energy, recovery and body signals',
   ],
   notForYou: [
     'You want a quick-fix transformation',
-    'You want a restrictive diet plan',
+    'You want a strict diet plan',
     'You need medical nutrition therapy',
     'You’re looking for diagnosis or treatment of a hormonal condition',
-    'You’re not open to strength training',
+    'You’re not open to strength training or gradual progress',
   ],
   scopeNote:
-    'This is personal training and general nutrition coaching. It does not replace medical care, dietetic treatment or therapy.',
+    'Strong with Mila offers personal training and general nutrition coaching. It does not replace medical care, diagnosis, dietetic treatment or therapy.',
+  ctaLabel: 'Enquire about coaching',
 };
 
 /**
