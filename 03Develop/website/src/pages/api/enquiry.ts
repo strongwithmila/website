@@ -91,8 +91,9 @@ export const POST: APIRoute = async ({ request }) => {
   }).catch(() => null);
 
   if (!res?.ok) {
-    // Log only the status, never the visitor's details
-    console.error(`Brevo could not send the enquiry email (status ${res?.status ?? 'network error'}).`);
+    // Log Brevo's reason (e.g. unverified sender, blocked IP), never the visitor's details
+    const reason = res ? await res.json().then((b) => b?.message ?? '', () => '') : 'network error';
+    console.error(`Brevo could not send the enquiry email (status ${res?.status ?? '-'}): ${reason}`);
     return json(502, { ok: false });
   }
 
