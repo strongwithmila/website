@@ -264,8 +264,14 @@ export const faq: FaqItem[] = [
 ];
 
 export const enquiry = {
-  heading: 'Start with a conversation',
-  intro: 'Tell me a little about you. I’ll reply personally to see whether the coaching is a good fit. There’s no commitment at this stage.',
+  eyebrow: 'Let’s work together',
+  heading: 'Your strength journey starts with a conversation.',
+  intro:
+    'Tell me a little about yourself and what you’re looking for. I’ll personally reply so we can explore whether coaching together feels like the right fit.',
+  ctaLabel: 'Enquire about coaching',
+  reassurance: 'No commitment. Just a first conversation.',
+  // Heading at the top of the pop-up form
+  formHeading: 'Start with a conversation',
   goals: [
     'Build strength & confidence in the gym',
     'Return to training after a break',
@@ -273,7 +279,6 @@ export const enquiry = {
     'Understand my energy & cycle patterns',
     'Not sure yet, I’d like to talk',
   ],
-  nextStep: 'I usually reply within a few working days.', // TODO(Mila): confirm response time.
 };
 
 export const footer = {

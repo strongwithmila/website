@@ -8,26 +8,39 @@ import { url } from '../utils/url';
 const endpoint = import.meta.env.PUBLIC_FORM_ENDPOINT ?? '';
 ---
 
-<section class="section" id="enquire" aria-labelledby="enquire-title">
-  <div class="container enquire">
-    <div class="enquire__intro">
-      <p class="eyebrow">Enquire</p>
-      <h2 id="enquire-title">{enquiry.heading}</h2>
-      <p class="lead">{enquiry.intro}</p>
+<section class="section enquire" id="enquire" aria-labelledby="enquire-title">
+  <div class="container enquire__inner">
+    <p class="enquire__eyebrow">{enquiry.eyebrow}</p>
+    <h2 id="enquire-title">{enquiry.heading}</h2>
+    <p class="enquire__intro">{enquiry.intro}</p>
+    <a class="btn btn--primary enquire__cta" href="#enquire" data-open-enquiry>{enquiry.ctaLabel}</a>
+    <p class="enquire__reassurance">{enquiry.reassurance}</p>
 
-      <div class="routes">
-        <p class="routes__label">Prefer another route?</p>
-        <a class="route" href={instagramUrl} rel="noopener" target="_blank">
-          <Icon name="instagram" size={22} />
-          <span>Message on Instagram<br /><small>@{contact.instagramHandle}</small></span>
+    <ul class="enquire__links">
+      <li>
+        <a href={instagramUrl} rel="noopener" target="_blank">
+          <Icon name="instagram" size={18} />@{contact.instagramHandle}
         </a>
-        <a class="route" href={`mailto:${contact.email}`}>
-          <Icon name="mail" size={22} />
-          <span>Send an email<br /><small>{contact.email}</small></span>
+      </li>
+      <li>
+        <a href={`mailto:${contact.email}`}>
+          <Icon name="mail" size={18} />{contact.email}
         </a>
-      </div>
-    </div>
+      </li>
+    </ul>
+  </div>
+</section>
 
+<!-- The enquiry form lives in this pop-up. Every link marked data-open-enquiry opens it
+     (top bar, package, fit section, FAQ and the section above). On phones it fills the screen. -->
+<dialog class="enquiry-dialog" id="enquiry-dialog" aria-labelledby="enquiry-dialog-title">
+  <div class="enquiry-dialog__head">
+    <h2 id="enquiry-dialog-title">{enquiry.formHeading}</h2>
+    <button class="enquiry-dialog__close" type="button" aria-label="Close the enquiry form">
+      <Icon name="cross" size={26} />
+    </button>
+  </div>
+  <div class="enquiry-dialog__body">
     <div class="form-card">
       <form
         id="enquiry-form"
@@ -35,7 +48,6 @@ const endpoint = import.meta.env.PUBLIC_FORM_ENDPOINT ?? '';
         novalidate
         data-endpoint={endpoint}
         data-email={contact.email}
-        data-next={enquiry.nextStep}
         aria-describedby="form-privacy"
       >
         <div class="form__errors" id="form-errors" role="alert" tabindex="-1" hidden></div>
@@ -96,18 +108,6 @@ const endpoint = import.meta.env.PUBLIC_FORM_ENDPOINT ?? '';
       </div>
     </div>
   </div>
-</section>
-
-<!-- Pop-up version of the form, opened by the "Enquire" button in the top bar.
-     It reuses the form above (moved in while open), so there is only ever one form. -->
-<dialog class="enquiry-dialog" id="enquiry-dialog" aria-labelledby="enquiry-dialog-title">
-  <div class="enquiry-dialog__head">
-    <h2 id="enquiry-dialog-title">{enquiry.heading}</h2>
-    <button class="enquiry-dialog__close" type="button" aria-label="Close">
-      <Icon name="cross" size={26} />
-    </button>
-  </div>
-  <div class="enquiry-dialog__body"></div>
 </dialog>
 
 <script>
@@ -132,32 +132,29 @@ const endpoint = import.meta.env.PUBLIC_FORM_ENDPOINT ?? '';
     if (msg) msg.hidden = !show;
   }
 
-  // Pop-up: links marked data-open-enquiry open the form in a dialog instead of scrolling to it.
+  // Pop-up: every link marked data-open-enquiry opens the form dialog.
+  // The form stays in the page while closed, so anything typed is kept until the visitor leaves.
   const dialog = document.getElementById('enquiry-dialog') as HTMLDialogElement | null;
-  const card = document.querySelector<HTMLElement>('.form-card');
-  if (dialog && card && typeof dialog.showModal === 'function') {
-    const home = card.parentElement!;
-    const body = dialog.querySelector('.enquiry-dialog__body')!;
+  if (dialog && typeof dialog.showModal === 'function') {
+    let trigger: HTMLElement | null = null;
 
     document.querySelectorAll<HTMLAnchorElement>('[data-open-enquiry]').forEach((link) =>
       link.addEventListener('click', (e) => {
         e.preventDefault();
-        body.append(card);
+        trigger = link;
         dialog.showModal();
-        document.getElementById('f-name')?.focus();
+        // Start at the first field, or at the thank-you message once sent
+        const start = done && !done.hidden ? done : document.getElementById('f-name');
+        start?.focus();
       }),
     );
     dialog.querySelector('.enquiry-dialog__close')?.addEventListener('click', () => dialog.close());
-    // Clicking the dimmed area outside the box closes it too
+    // Clicking the dimmed area outside the box closes it too (Escape is handled by the browser)
     dialog.addEventListener('click', (e) => {
       if (e.target === dialog) dialog.close();
     });
-    // Escape: close through the same path as the close button, so the form always moves back
-    dialog.addEventListener('cancel', (e) => {
-      e.preventDefault();
-      dialog.close();
-    });
-    dialog.addEventListener('close', () => home.append(card));
+    // Return focus to the button that opened the form
+    dialog.addEventListener('close', () => trigger?.focus());
   }
 
   if (form && errorsBox && done && doneText) {
@@ -215,6 +212,7 @@ const endpoint = import.meta.env.PUBLIC_FORM_ENDPOINT ?? '';
 
       submit.disabled = true;
       submit.textContent = 'Sending…';
+      form.setAttribute('aria-busy', 'true');
       try {
         const res = await fetch(endpoint, {
           method: 'POST',
@@ -222,7 +220,7 @@ const endpoint = import.meta.env.PUBLIC_FORM_ENDPOINT ?? '';
           body: JSON.stringify(payload),
         });
         if (!res.ok) throw new Error(String(res.status));
-        doneText.textContent = `Your enquiry has been sent. I’ll reply personally to ${payload.email}. ${form.dataset.next ?? ''}`;
+        doneText.textContent = `Your enquiry is on its way, and I’m glad you reached out. I’ll reply personally to ${payload.email}.`;
         form.hidden = true;
         done.hidden = false;
         done.focus();
@@ -231,6 +229,7 @@ const endpoint = import.meta.env.PUBLIC_FORM_ENDPOINT ?? '';
         errorsBox.hidden = false;
         errorsBox.focus();
       } finally {
+        form.removeAttribute('aria-busy');
         submit.disabled = false;
         submit.textContent = 'Send my enquiry';
       }
@@ -239,53 +238,88 @@ const endpoint = import.meta.env.PUBLIC_FORM_ENDPOINT ?? '';
 </script>
 
 <style>
-  .enquire {
-    display: grid;
-    gap: clamp(2.5rem, 6vw, 4.5rem);
-    align-items: start;
+  /* Final invitation: centred, quiet, one clear button */
+  .enquire__inner {
+    max-width: 40rem;
+    text-align: center;
   }
-  .routes {
-    margin-top: 2rem;
-    display: grid;
-    gap: 0.75rem;
+  .enquire__eyebrow {
+    margin: 0 0 1.25rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgb(58 42 36 / 0.78);
   }
-  .routes__label {
-    margin: 0;
-    font-weight: 600;
-    font-size: 0.9rem;
-  }
-  .route {
-    display: flex;
-    align-items: center;
-    gap: 0.9rem;
-    padding: 0.9rem 1.1rem;
-    border: 1px solid var(--line);
-    border-radius: 0.9rem;
-    text-decoration: none;
-    color: var(--brown);
-    line-height: 1.35;
-    transition: border-color 0.2s;
-  }
-  .route:hover {
-    border-color: var(--plum);
-  }
-  .route :global(svg) {
+  .enquire h2 {
+    margin: 0 0 1.5rem;
+    font-size: clamp(2.2rem, 1.6rem + 2.4vw, 3.4rem);
+    font-weight: 400;
+    line-height: 1.1;
+    letter-spacing: -0.01em;
     color: var(--plum);
-    flex: none;
+    text-wrap: balance;
   }
-  .route small {
-    font-size: 0.82rem;
+  .enquire__intro {
+    max-width: 34rem;
+    margin: 0 auto 2.25rem;
+    font-size: 1.05rem;
+    line-height: 1.75;
+  }
+  .enquire__cta {
+    padding: 0.95rem 2rem;
+  }
+  .enquire__reassurance {
+    margin: 1rem 0 0;
+    font-family: var(--font-serif);
+    font-style: italic;
+    color: var(--plum);
+  }
+  .enquire__links {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.75rem 2rem;
+    margin: 2.5rem 0 0;
+    padding: 2rem 0 0;
+    list-style: none;
+    border-top: 1px solid var(--line);
+  }
+  .enquire__links a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 2.75rem;
+    font-size: 0.92rem;
+    color: var(--brown);
+    text-decoration: none;
     overflow-wrap: anywhere;
   }
+  .enquire__links a:hover {
+    color: var(--plum);
+    text-decoration: underline;
+    text-underline-offset: 0.3em;
+  }
+  .enquire__links :global(svg) {
+    flex: none;
+    color: var(--plum);
+  }
+  @media (max-width: 30rem) {
+    .enquire__cta {
+      width: 100%;
+    }
+  }
+
   .form-card {
-    background: var(--white);
-    border: 1px solid var(--line);
-    border-radius: var(--radius);
-    padding: clamp(1.5rem, 4vw, 2.5rem);
+    padding: 0.5rem clamp(1.5rem, 4vw, 2.5rem) clamp(1.5rem, 4vw, 2.5rem);
   }
   .form {
     display: grid;
     gap: 1.25rem;
+  }
+  /* Hide the form once sent (display: grid would otherwise keep it visible) */
+  .form[hidden] {
+    display: none;
   }
   .field {
     display: grid;
@@ -306,7 +340,7 @@ const endpoint = import.meta.env.PUBLIC_FORM_ENDPOINT ?? '';
     font: inherit;
     font-size: 1rem;
     color: var(--brown);
-    background: var(--cream);
+    background: var(--white);
     border: 1.5px solid #b9a9a2;
     border-radius: 0.65rem;
     padding: 0.75rem 0.9rem;
@@ -397,21 +431,29 @@ const endpoint = import.meta.env.PUBLIC_FORM_ENDPOINT ?? '';
     color: var(--forest);
     margin: 0 auto 1rem;
   }
-  @media (min-width: 60rem) {
-    .enquire {
-      grid-template-columns: 1fr 1.2fr;
-    }
-  }
 
   .enquiry-dialog {
     width: min(100% - 2rem, 34rem);
+    max-width: none;
     max-height: calc(100dvh - 2rem);
     padding: 0;
     border: 0;
     border-radius: var(--radius);
-    background: var(--white);
+    background: var(--cream);
     color: var(--brown);
-    box-shadow: 0 1.5rem 4rem rgb(58 42 36 / 0.25);
+    box-shadow: 0 1rem 3rem rgb(58 42 36 / 0.18);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+  /* Phones: the form fills the screen and scrolls naturally */
+  @media (max-width: 40rem) {
+    .enquiry-dialog {
+      width: 100%;
+      height: 100dvh;
+      max-height: none;
+      border-radius: 0;
+      box-shadow: none;
+    }
   }
   .enquiry-dialog::backdrop {
     background: rgb(58 42 36 / 0.45);
@@ -426,7 +468,7 @@ const endpoint = import.meta.env.PUBLIC_FORM_ENDPOINT ?? '';
     justify-content: space-between;
     gap: 1rem;
     padding: 1.25rem clamp(1.5rem, 4vw, 2.5rem) 0.75rem;
-    background: var(--white);
+    background: var(--cream);
   }
   .enquiry-dialog__head h2 {
     margin: 0;
@@ -445,13 +487,11 @@ const endpoint = import.meta.env.PUBLIC_FORM_ENDPOINT ?? '';
     color: var(--plum);
     cursor: pointer;
   }
+  .enquiry-dialog__head h2 {
+    color: var(--plum);
+  }
   .enquiry-dialog__close:hover {
     background: var(--offwhite);
-  }
-  .enquiry-dialog .form-card {
-    border: 0;
-    border-radius: 0;
-    padding-top: 0.5rem;
   }
   :global(html:has(.enquiry-dialog[open])) {
     overflow: hidden;

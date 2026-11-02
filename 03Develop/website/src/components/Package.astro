@@ -31,7 +31,7 @@ import { offer, cta, founding } from '../content/site';
             <dd>{offer.price || offer.priceNote}</dd>
           </div>
         </dl>
-        <a class="btn btn--primary includes__cta" href="#enquire">{cta.primary}</a>
+        <a class="btn btn--primary includes__cta" href="#enquire" data-open-enquiry>{cta.primary}</a>
         {founding.enabled && <p class="includes__hint">{founding.heading} are available now.</p>}
       </aside>
 
