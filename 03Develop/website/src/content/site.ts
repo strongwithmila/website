@@ -11,6 +11,7 @@
 import type { ImageMetadata } from 'astro';
 import aboutPhoto from '../assets/mila-portrait.png';
 import testimonialIllustration from '../assets/testimonial-illustration.png';
+import testimonialIllustrationGlasses from '../assets/testimonial-illustration-glasses.png';
 import methodTrain from '../assets/method-train.png';
 import methodFuel from '../assets/method-fuel.png';
 import methodUnderstand from '../assets/method-understand.png';
@@ -215,8 +216,7 @@ export const about = {
 
 /**
  * Testimonials: real, approved client words only. Never invent or rewrite them.
- * Only the first one is shown for now (as a featured quote). Add up to two more later;
- * the layout can then grow into one featured and two smaller quotes.
+ * Each one is shown as its own card; on desktop the illustration alternates sides.
  * `image` is a decorative illustration, not a likeness of the client.
  */
 export const testimonials = {
@@ -231,6 +231,14 @@ export const testimonials = {
       ],
       attribution: 'N., 41 — Berlin',
       image: testimonialIllustration as ImageMetadata | null,
+    },
+    {
+      // Wording approved by M. (6 Nov 2026).
+      paragraphs: [
+        'If you’re looking for a plan that adapts to you, helps you connect with your body, and teaches you more about yourself, Mila is the right trainer for you. She’s helping me build a routine that I can maintain and genuinely love.',
+      ],
+      attribution: 'M., 28 — Berlin',
+      image: testimonialIllustrationGlasses as ImageMetadata | null,
     },
   ],
 };

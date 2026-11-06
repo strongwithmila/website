@@ -2,12 +2,12 @@
 import { Image } from 'astro:assets';
 import { testimonials } from '../content/site';
 
-// One featured quote for now. When more approved testimonials are added to the list,
-// the rest can be shown as smaller quotes below this one.
-const [featured] = testimonials.items;
+// Every approved quote gets its own card. On desktop the illustration
+// alternates sides (left, right, left…) so the cards read like a magazine spread.
+const { items } = testimonials;
 ---
 
-{featured && (
+{items.length > 0 && (
   <section class="section kind-words" aria-labelledby="kind-words-title">
     <div class="container kind-words__inner">
       <header class="kind-words__head">
@@ -15,20 +15,24 @@ const [featured] = testimonials.items;
         <h2 id="kind-words-title">{testimonials.heading}</h2>
       </header>
 
-      <figure class="quote">
-        {featured.image && (
-          <div class="quote__art">
-            <!-- Decorative illustration, not a likeness of the client -->
-            <Image src={featured.image} alt="" widths={[200, 320, 440]} sizes="(min-width: 48rem) 13rem, 9rem" />
-          </div>
-        )}
-        <div class="quote__body">
-          <blockquote>
-            {featured.paragraphs.map((p) => <p>{p}</p>)}
-          </blockquote>
-          <figcaption>{featured.attribution}</figcaption>
-        </div>
-      </figure>
+      <div class="quotes">
+        {items.map((item) => (
+          <figure class="quote">
+            {item.image && (
+              <div class="quote__art">
+                <!-- Decorative illustration, not a likeness of the client -->
+                <Image src={item.image} alt="" widths={[200, 320, 440]} sizes="(min-width: 48rem) 13rem, 9rem" />
+              </div>
+            )}
+            <div class="quote__body">
+              <blockquote>
+                {item.paragraphs.map((p) => <p>{p}</p>)}
+              </blockquote>
+              <figcaption>{item.attribution}</figcaption>
+            </div>
+          </figure>
+        ))}
+      </div>
     </div>
   </section>
 )}
@@ -54,7 +58,12 @@ const [featured] = testimonials.items;
     text-wrap: balance;
   }
 
-  /* The quote sits in a soft card. Phones: small illustration, then the quote */
+  .quotes {
+    display: grid;
+    gap: clamp(1.5rem, 4vw, 2.5rem);
+  }
+
+  /* Each quote sits in a soft card. Phones: small illustration, then the quote */
   .quote {
     margin: 0;
     padding: clamp(1.75rem, 6vw, 3.5rem);
@@ -116,6 +125,13 @@ const [featured] = testimonials.items;
     .quote__art {
       width: 100%;
       margin: 0;
+    }
+    /* Every second card mirrors: quote on the left, illustration on the right */
+    .quote:nth-child(even) {
+      grid-template-columns: minmax(0, 36rem) 13rem;
+    }
+    .quote:nth-child(even) .quote__art {
+      order: 2;
     }
   }
 </style>
