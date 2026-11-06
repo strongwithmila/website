@@ -2,9 +2,10 @@
 import { Image } from 'astro:assets';
 import { testimonials } from '../content/site';
 
-// Every approved quote gets its own card. On desktop the illustration
-// alternates sides (left, right, left…) so the cards read like a magazine spread.
+// A carousel: one quote card at a time, slide sideways with the arrows
+// (or swipe on phones). With a single quote the arrows and dots are hidden.
 const { items } = testimonials;
+const hasMany = items.length > 1;
 ---
 
 {items.length > 0 && (
@@ -15,27 +16,87 @@ const { items } = testimonials;
         <h2 id="kind-words-title">{testimonials.heading}</h2>
       </header>
 
-      <div class="quotes">
-        {items.map((item) => (
-          <figure class="quote">
-            {item.image && (
-              <div class="quote__art">
-                <!-- Decorative illustration, not a likeness of the client -->
-                <Image src={item.image} alt="" widths={[200, 320, 440]} sizes="(min-width: 48rem) 13rem, 9rem" />
-              </div>
-            )}
-            <div class="quote__body">
-              <blockquote>
-                {item.paragraphs.map((p) => <p>{p}</p>)}
-              </blockquote>
-              <figcaption>{item.attribution}</figcaption>
+      <div class="carousel" data-carousel aria-roledescription="carousel" aria-label="Client testimonials">
+        <ul class="carousel__track" data-track tabindex={hasMany ? 0 : undefined} aria-label={hasMany ? 'Testimonials — scroll sideways or use the arrows' : undefined}>
+          {items.map((item, i) => (
+            <li class="carousel__slide" aria-roledescription="slide" aria-label={`${i + 1} of ${items.length}`}>
+              <figure class="quote">
+                {item.image && (
+                  <div class="quote__art">
+                    <!-- Decorative illustration, not a likeness of the client -->
+                    <Image src={item.image} alt="" widths={[200, 320, 440]} sizes="(min-width: 48rem) 13rem, 9rem" />
+                  </div>
+                )}
+                <div class="quote__body">
+                  <blockquote>
+                    {item.paragraphs.map((p) => <p>{p}</p>)}
+                  </blockquote>
+                  <figcaption>{item.attribution}</figcaption>
+                </div>
+              </figure>
+            </li>
+          ))}
+        </ul>
+
+        {hasMany && (
+          <div class="carousel__controls">
+            <button type="button" class="carousel__arrow" data-prev aria-label="Previous testimonial">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" /></svg>
+            </button>
+            <div class="carousel__dots" aria-hidden="true">
+              {items.map(() => <span class="carousel__dot" data-dot />)}
             </div>
-          </figure>
-        ))}
+            <button type="button" class="carousel__arrow" data-next aria-label="Next testimonial">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7" /></svg>
+            </button>
+          </div>
+        )}
       </div>
     </div>
   </section>
 )}
+
+<script>
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+  document.querySelectorAll<HTMLElement>('[data-carousel]').forEach((carousel) => {
+    const track = carousel.querySelector<HTMLElement>('[data-track]');
+    const prev = carousel.querySelector<HTMLButtonElement>('[data-prev]');
+    const next = carousel.querySelector<HTMLButtonElement>('[data-next]');
+    const dots = carousel.querySelectorAll<HTMLElement>('[data-dot]');
+    if (!track || !prev || !next) return;
+
+    const slideCount = track.children.length;
+    const current = () => Math.round(track.scrollLeft / track.clientWidth);
+
+    const goTo = (index: number) => {
+      const target = Math.max(0, Math.min(slideCount - 1, index));
+      track.scrollTo({
+        left: target * track.clientWidth,
+        behavior: reduceMotion.matches ? 'auto' : 'smooth',
+      });
+    };
+
+    const update = () => {
+      const i = current();
+      prev.disabled = i <= 0;
+      next.disabled = i >= slideCount - 1;
+      dots.forEach((dot, d) => dot.classList.toggle('is-active', d === i));
+      // Only the visible slide is read out / reachable by screen readers
+      Array.from(track.children).forEach((slide, s) => slide.setAttribute('aria-hidden', String(s !== i)));
+    };
+
+    prev.addEventListener('click', () => goTo(current() - 1));
+    next.addEventListener('click', () => goTo(current() + 1));
+    track.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft') { e.preventDefault(); goTo(current() - 1); }
+      if (e.key === 'ArrowRight') { e.preventDefault(); goTo(current() + 1); }
+    });
+    track.addEventListener('scroll', () => window.requestAnimationFrame(update), { passive: true });
+    window.addEventListener('resize', update);
+    update();
+  });
+</script>
 
 <style>
   .kind-words__inner {
@@ -58,13 +119,87 @@ const { items } = testimonials;
     text-wrap: balance;
   }
 
-  .quotes {
+  /* The track scrolls sideways and snaps to one card at a time */
+  .carousel__track {
+    display: flex;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    border-radius: var(--radius);
+  }
+  .carousel__track::-webkit-scrollbar {
+    display: none;
+  }
+  .carousel__slide {
+    flex: 0 0 100%;
+    display: flex;
+    scroll-snap-align: start;
+  }
+
+  .carousel__controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.25rem;
+    margin-top: 1.75rem;
+  }
+  .carousel__arrow {
     display: grid;
-    gap: clamp(1.5rem, 4vw, 2.5rem);
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    padding: 0;
+    color: var(--plum);
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background-color 0.2s, color 0.2s, border-color 0.2s, opacity 0.2s;
+  }
+  .carousel__arrow svg {
+    width: 1.15rem;
+    height: 1.15rem;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.6;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .carousel__arrow:hover:not(:disabled) {
+    color: var(--cream);
+    background: var(--plum);
+    border-color: var(--plum);
+  }
+  .carousel__arrow:disabled {
+    opacity: 0.35;
+    cursor: default;
+  }
+  .carousel__dots {
+    display: flex;
+    gap: 0.5rem;
+  }
+  .carousel__dot {
+    width: 0.45rem;
+    height: 0.45rem;
+    border-radius: 50%;
+    background: var(--line);
+    transition: background-color 0.2s, transform 0.2s;
+  }
+  .carousel__dot.is-active {
+    background: var(--plum);
+    transform: scale(1.2);
   }
 
   /* Each quote sits in a soft card. Phones: small illustration, then the quote */
   .quote {
+    flex: 1;
+    /* Cards share the tallest card's height; keep content centred inside */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     margin: 0;
     padding: clamp(1.75rem, 6vw, 3.5rem);
     background: var(--white);
@@ -90,9 +225,11 @@ const { items } = testimonials;
     line-height: 1.65;
     color: var(--brown);
   }
+  blockquote p:last-child {
+    margin-bottom: 0;
+  }
   /* The personal second paragraph, set apart in italic plum */
   blockquote p + p {
-    margin-bottom: 0;
     font-style: italic;
     color: var(--plum);
   }
@@ -114,7 +251,6 @@ const { items } = testimonials;
 
   /* Desktop: illustration on the left, quote on the right, like a magazine feature */
   @media (min-width: 48rem) {
-    /* Illustration and quote centred as one group inside the card */
     .quote {
       display: grid;
       grid-template-columns: 13rem minmax(0, 36rem);
@@ -125,13 +261,6 @@ const { items } = testimonials;
     .quote__art {
       width: 100%;
       margin: 0;
-    }
-    /* Every second card mirrors: quote on the left, illustration on the right */
-    .quote:nth-child(even) {
-      grid-template-columns: minmax(0, 36rem) 13rem;
-    }
-    .quote:nth-child(even) .quote__art {
-      order: 2;
     }
   }
 </style>

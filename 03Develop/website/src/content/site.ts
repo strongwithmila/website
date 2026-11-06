@@ -216,7 +216,7 @@ export const about = {
 
 /**
  * Testimonials: real, approved client words only. Never invent or rewrite them.
- * Each one is shown as its own card; on desktop the illustration alternates sides.
+ * Shown as a carousel: one card at a time, with arrows (and swipe on phones).
  * `image` is a decorative illustration, not a likeness of the client.
  */
 export const testimonials = {
