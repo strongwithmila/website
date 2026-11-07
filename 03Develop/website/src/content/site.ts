@@ -9,7 +9,7 @@
  *  decision. Do not publish until each one is confirmed.
  */
 import type { ImageMetadata } from 'astro';
-import aboutPhoto from '../assets/mila-portrait.png';
+import aboutPhoto from '../assets/mila-about.jpg';
 import testimonialIllustration from '../assets/testimonial-illustration.png';
 import testimonialIllustrationGlasses from '../assets/testimonial-illustration-glasses.png';
 import methodTrain from '../assets/method-train.png';
@@ -73,7 +73,7 @@ export const hero = {
   ctaHref: '#package',
   secondaryLabel: 'Meet Mila',
   secondaryHref: '#about',
-  photoAlt: 'Mila sitting on the floor of a bright living room, holding a Strong with Mila water bottle.',
+  photoAlt: 'Mila sitting on the floor of a bright living room beside a sofa and trailing ivy, holding a Strong with Mila water bottle.',
 };
 
 export const resonance = {
@@ -196,7 +196,7 @@ export const fit = {
 /**
  * TODO(Mila): this story is the draft from the website brief. Edit freely;
  * add credentials only once they are real and confirmed.
- * To change the photo, replace src/assets/mila-portrait.png (or import another image) and update `photoAlt`.
+ * To change the photo, replace src/assets/mila-about.jpg (or import another image) and update `photoAlt`.
  */
 export const about = {
   eyebrow: 'A little about me',
@@ -210,7 +210,7 @@ export const about = {
   philosophy: 'I believe the plan should fit the person, not the other way around.',
   note: 'support changed everything',
   photo: aboutPhoto as ImageMetadata | null,
-  photoAlt: 'Mila sitting on a sofa at home, resting her chin on her hand and smiling.',
+  photoAlt: 'Mila at home in a white cardigan, resting her cheek on her hand and smiling softly.',
   credentials: [] as string[],
 };
 
