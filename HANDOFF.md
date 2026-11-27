@@ -66,16 +66,16 @@ Last swept: 2026-11-26 (sessions 2026-10-29 → 2026-11-26, 5 sessions in this f
 - [ ] The open decisions and launch blockers listed in §1
 
 ### To record (decision not yet in the log files)
-- [ ] 26 Nov: `/onboard` and `/handoff` skills added to `.claude/skills/`, adapted from the Instagram project. Not yet in `decision-log.md` or `DECISIONS.md`. — this session
+- [x] 26 Nov: `/onboard` and `/handoff` skills added to `.claude/skills/`, adapted from the Instagram project. Not yet in `decision-log.md` or `DECISIONS.md`. — this session
 
 ### Reported, not fixed
 - [ ] The repository is public, including the `00Context` documents, source photos and `decision-log.md`, which mentions the unconfirmed price. — 24 Nov
 - [ ] About 15 `00Context` reference documents listed in CLAUDE.md haven't been added to the project. — decision log
 
 ### Inconsistencies to check
-- [ ] `decision-log.md` (11 Nov entry) says "the project has no `.claude/skills/` folder". That is no longer true since 26 Nov.
-- [ ] Testimonials are live, but `ROADMAP.md` still lists them as a Phase 2 idea.
-- [ ] Some items in the decision log's blocker list are missing from the `ROADMAP.md` launch checklist: logo tagline, Train photo, repository visibility, and limiting the Brevo key to sending only.
+- [x] `decision-log.md` (11 Nov entry) says "the project has no `.claude/skills/` folder". That is no longer true since 26 Nov.
+- [x] Testimonials are live, but `ROADMAP.md` still lists them as a Phase 2 idea.
+- [x] Some items in the decision log's blocker list are missing from the `ROADMAP.md` launch checklist: logo tagline, Train photo, repository visibility, and limiting the Brevo key to sending only.
 
 ### Outside Claude (Vercel, Brevo, domain, legal review)
 - [ ] Sign the Brevo DPA and the Vercel DPA. Limit the Brevo API key to sending only.

@@ -22,6 +22,9 @@
 - [ ] Write Impressum and Datenschutzerklärung; professional legal review
 - [ ] Decide enquiry retention period
 - [ ] Final visual QA on real phones (iOS Safari, Android Chrome)
+- [ ] Limit the Brevo API key to sending only
+- [ ] Decide the logo tagline and confirm the Train photo is acceptable
+- [ ] Decide whether the repository stays public
 
 ## Phase 2 — after launch (ideas, not commitments)
 
@@ -29,4 +32,4 @@
 - Privacy-friendly analytics only if needed (cookie-free, EU-hosted)
 - Optional booking link (Calendly/TidyCal) after fit-check flow is proven
 - German version, human-reviewed
-- Testimonials section, only with real, consented quotes
+- ~~Testimonials section, only with real, consented quotes~~ done 2026-11-02 (carousel 2026-11-06)

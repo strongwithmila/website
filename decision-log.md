@@ -1,8 +1,8 @@
 # Strong with Mila Website — Decision Log
 
-A record of the discussions and decisions from every Claude chat about this project, from the first folder setup on 28 Oct 2026 to the review-flow discussion on 11 Nov 2026.
+A record of the discussions and decisions from every Claude chat about this project, from the first folder setup on 28 Oct 2026 to the handoff skills added on 26 Nov 2026.
 
-- **Compiled:** 24 Nov 2026, from the chat transcripts, the git history and `03Develop/website/docs/DECISIONS.md`.
+- **Compiled:** 24 Nov 2026 (last updated 27 Nov 2026), from the chat transcripts, the git history and `03Develop/website/docs/DECISIONS.md`.
 - **Scope:** the website project only: chats run in `Desktop/Claude Code`, `Desktop/Claude Strong Website` and this folder. The separate **Claude Code Brand Project** (Instagram content, photo edits, content calendar) is not included.
 - **Status key:** **Decided** (Mila chose or approved it in the chat) · **Proposed** (built this way, not yet confirmed) · **Open** (still needs a decision) · **Superseded** (replaced by a later decision).
 - The short, maintained table of approved decisions is still [03Develop/website/docs/DECISIONS.md](03Develop/website/docs/DECISIONS.md). This log has more of the story and the reasoning.
@@ -249,7 +249,24 @@ Mila asked to try an official team flow: a new branch with only the commands and
 
 **Status: Open.** No branch, invite or protection rule was created. It still needs the PR content, the reviewer's GitHub username and a yes/no on protecting `main`.
 
-*As of 24 Nov, `build-flow` is still a command (`.claude/commands/build-flow.md`) and the project has no `.claude/skills/` folder.*
+*As of 26 Nov, `build-flow` is still a command (`.claude/commands/build-flow.md`). A `.claude/skills/` folder now exists (see 26 Nov), and that unpushed commit could serve as the test pull request.*
+
+---
+
+## 24 Nov 2026 — Decision log
+
+- **Decided:** this `decision-log.md` was compiled from all website chats and committed to `main`.
+
+---
+
+## 26 Nov 2026 — Onboarding and handoff skills
+
+**Chat:** "Skills file onboarding"
+
+- **Decided:** added `/onboard` and `/handoff` skills to `.claude/skills/`. They were adapted from the Instagram project and now point at this project's files: `decision-log.md`, `DECISIONS.md`, `ROADMAP.md`, `README.md` and git.
+- **Decided:** `HANDOFF.md` was created at the project root. It holds the current status and loose ends, and `/handoff` refreshes it.
+- **Decided:** the first `/handoff` sweep fixed three outdated notes. The 11 Nov skills-folder note was updated, `ROADMAP.md` now marks testimonials as done, and the missing launch items were added to the roadmap's checklist.
+- **Open:** these commits are not pushed yet. They could go through the team review flow (see 11 Nov) instead of straight to `main`.
 
 ---
 
